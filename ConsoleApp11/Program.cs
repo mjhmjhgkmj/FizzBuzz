@@ -28,6 +28,12 @@
         var result = String.Join("", handlers(i).Select(f => f(i)));
         return result != "" ? result : i.ToString();
     }
+    static object[][] mapper = [[3, "Три"], [5, "Пять"], [7, "Семь"]];
+    public static string Do(int value) =>
+        string.Join("", mapper
+            .Where(item => value % (int)item[0] == 0)
+            .Select(item => (string)item[1]));
+
 
 
     static void FizzBuzzProgram2(Action<string?> outputMethod, int n)
