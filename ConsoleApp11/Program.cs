@@ -2,7 +2,7 @@
 {
     public static void Main(string[] args)
     {
-        FizzBuzzProgram2(Console.WriteLine, 35);
+        FizzBuzzProgram(Console.WriteLine, 350);
     }
     public static void FizzBuzzProgram(Action<string?> outputMethod, int n) =>
         outputMethod(Enumerable.Range(1, n)
@@ -11,15 +11,20 @@
 
     static readonly Func<int, string?>[] handlers =
     [
-        (n) => n % 3 == 0 ? "Fizz" : null,
-        (n) => n % 5 == 0 ? "Buzz" : null,
-        (n) => n % 7 == 0 ? "Quxx" : null
+        (n) => n % 3 == 0 ? "Три" : null,
+        (n) => n % 5 == 0 ? "Пять" : null,
+        (n) => n % 7 == 0 ? "Семь" : null,
+        (n) => n % 11 == 0 ? "Одиннадать" : null,
+        (n) => n % 13 == 0 ? "Тринадцать" : null,
+        (n) => n % 17 == 0 ? "Семьнадцать" : null
     ];
-    static string? FizzBuzzPipeline(int i) =>
-        handlers.Select(handler => handler(i))
-                .Where(r => r != null)
-                .DefaultIfEmpty(i.ToString())
-                .Aggregate((a, b) => a + b);
+    public static string FizzBuzzPipeline(int i)
+    {
+        var result = String.Join("", handlers.Select(f => f(i)));
+        return result != "" ? result : i.ToString();
+    }
+
+
     static void FizzBuzzProgram2(Action<string?> outputMethod, int n)
     {
         for (int i = 1; i <= n; i++)
