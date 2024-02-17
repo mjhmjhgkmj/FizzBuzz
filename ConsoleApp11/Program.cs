@@ -6,21 +6,26 @@
     }
     public static void FizzBuzzProgram(Action<string?> outputMethod, int n) =>
         outputMethod(Enumerable.Range(1, n)
-            .Select(FizzBuzzPipeline)
-            .Aggregate((a, b) => a + "\r\n" + b));
+        .Select(FizzBuzzPipeline)
+        .Aggregate((a, b) => a + "\r\n" + b));
 
-    static readonly Func<int, string?>[] handlers =
-    [
-        (n) => n % 3 == 0 ? "Три" : null,
-        (n) => n % 5 == 0 ? "Пять" : null,
-        (n) => n % 7 == 0 ? "Семь" : null,
-        (n) => n % 11 == 0 ? "Одиннадать" : null,
-        (n) => n % 13 == 0 ? "Тринадцать" : null,
-        (n) => n % 17 == 0 ? "Семьнадцать" : null
-    ];
+    static int[] primes (int N) => 
+        Enumerable.Range(2, N)
+        .Where(IsPrime)
+        .ToArray();
+
+    public static bool IsPrime(int number) =>
+        number >= 2 
+        && Enumerable.Range(2, (int)Math.Sqrt(number) - 1)
+           .All(i => number % i != 0);
+
+    static Func<int, string?>[] handlers(int N) => primes(N).Select(prime =>
+        new Func<int, string?>(n => n % prime == 0 ? prime.ToString() + "**" : null)
+    ).ToArray();
+
     public static string FizzBuzzPipeline(int i)
     {
-        var result = String.Join("", handlers.Select(f => f(i)));
+        var result = String.Join("", handlers(i).Select(f => f(i)));
         return result != "" ? result : i.ToString();
     }
 
